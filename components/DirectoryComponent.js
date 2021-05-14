@@ -11,6 +11,10 @@ function Directory(props) {
             <ListItem
                 title={item.name}
                 subtitle={item.description}
+                onPress={() => props.onPress(item.id)}
+                // built in onPress prop
+                // trigger onCampsiteSelect event handler passed in via props
+                // have access to the id of the pressed campsite so give the value to onCampsiteSelect event handler here to update selectedCampsite property in Main component with this id
                 leftAvatar={{ source: require('./images/react-lake.jpg') }}
                 /* requires object so 2 sets of {{}} */
                 /* takes property of source and value is function provided by NodeJS (require) */
