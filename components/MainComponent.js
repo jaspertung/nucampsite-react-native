@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import Directory from './DirectoryComponent';
-import CampsiteInfo from './CampsiteInfoComponent';
 import { View, Platform } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation-drawer'
 // import { CAMPSITES } from '../shared/campsites'; deleted when added navigation
+import Directory from './DirectoryComponent';
+import CampsiteInfo from './CampsiteInfoComponent';
+import Home from './HomeComponent';
 
 // Main component creates and holds all navigators
+
 const DirectoryNavigator = createStackNavigator(
     // createStackNavigator function that requires 1 argument called routeCanFix object
     {
@@ -31,9 +34,42 @@ const DirectoryNavigator = createStackNavigator(
     }
 )
 
-// return React component that handles connecting top level navigator to React Native application environment to respond to interactions like back button on device
+// stack navigator for Home component
+const HomeNavigator = createStackNavigator(
+    {
+        Home: { screen: Home }
+    },
+    {
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: '#5637DD'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                color: '#fff'
+            }
+        }
+    }
+)
+
+// drawer navigator for Home component
+const MainNavigator = createDrawerNavigator(
+    {
+        // 1st argument: object that contains the screens that will be in the drawer
+        Home: { screen: HomeNavigator },
+        Directory: { screen: DirectoryNavigator }
+        // route through stack navigator so give HomeNavigator and DirectoryNavigator instead of Component
+    },
+    {
+        drawerBackgroundColor: '#CEC8FF'
+    }
+)
+
+/* // return React component that handles connecting top level navigator to React Native application environment to respond to interactions like back button on device
 const AppNavigator = createAppContainer(DirectoryNavigator)
-// wrap top level navigator with createAppContainer
+// wrap top level navigator with createAppContainer */
+const AppNavigator = createAppContainer(MainNavigator)
+// MainNavigator replaced DirectoryNavigator as the top level navigator
 
 class Main extends Component {
     /*constructor(props) {
