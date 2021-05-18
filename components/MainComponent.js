@@ -7,9 +7,12 @@ import { createDrawerNavigator } from 'react-navigation-drawer'
 import Directory from './DirectoryComponent';
 import CampsiteInfo from './CampsiteInfoComponent';
 import Home from './HomeComponent';
+import About from './AboutComponent';
+import Contact from './ContactComponent';
 
 // Main component creates and holds all navigators
 
+// stack navigator for Directory component
 const DirectoryNavigator = createStackNavigator(
     // createStackNavigator function that requires 1 argument called routeCanFix object
     {
@@ -52,13 +55,51 @@ const HomeNavigator = createStackNavigator(
     }
 )
 
+// stack navigator for About component
+const AboutNavigator = createStackNavigator(
+    {
+        About: { screen: About }
+    },
+    {
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: '#5637DD'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                color: '#fff'
+            }
+        }
+    }
+)
+
+// stack navigator for Contact component
+const ContactNavigator = createStackNavigator(
+    {
+        Contact: { screen: Contact }
+    },
+    {
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: '#5637DD'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                color: '#fff'
+            }
+        }
+    }
+)
+
 // drawer navigator for Home component
 const MainNavigator = createDrawerNavigator(
     {
         // 1st argument: object that contains the screens that will be in the drawer
         Home: { screen: HomeNavigator },
-        Directory: { screen: DirectoryNavigator }
+        Directory: { screen: DirectoryNavigator },
         // route through stack navigator so give HomeNavigator and DirectoryNavigator instead of Component
+        About: { screen: AboutNavigator },
+        Contact: { screen: ContactNavigator }
     },
     {
         drawerBackgroundColor: '#CEC8FF'
