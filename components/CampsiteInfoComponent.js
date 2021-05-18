@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 import { Text, View, ScrollView, FlatList } from 'react-native'
-import { Card, ListItem } from 'react-native-elements'
+import { Card, Icon } from 'react-native-elements'
 import { CAMPSITES } from '../shared/campsites'
 import { COMMENTS } from '../shared/comments'
 
 
-function RenderCampsite({campsite}) {
-    // only using the property of the campsite object so can destructure (???)
+// function RenderCampsite({campsite}) {
+    // only using the property of the campsite object so can destructure
+function RenderCampsite(props) {
+    // using more properties (favorite) now so don't destructure and use props instead
+
+    const {campsite} = props //destructure here instead and can still use favorite props
     if (campsite) {
         return (
             <Card
@@ -16,6 +20,15 @@ function RenderCampsite({campsite}) {
                     {/* looks like CSS but is JS object */}
                     {campsite.description}
                 </Text>
+                <Icon
+                    name={props.favorite ? "heart" : "heart-o"}
+                    // if favorite is true, display solid heart, else outline heart
+                    type="font-awesome"
+                    color="#f50"
+                    raised //shadow effect
+                    reverse //reverse color scheme
+                    onPress={() => props.favorite ? console.log(`Already set as a favorite`) : props.markFavorite()}
+                />
             </Card>
         )
     }
@@ -50,8 +63,14 @@ class CampsiteInfo extends Component {
         super(props)
         this.state = {
             campsites: CAMPSITES,
-            comments: COMMENTS
+            comments: COMMENTS,
+            favorite: false
+            // change to redux later because rn favorite will reset every time CampsiteInfoComponent is loaded
         }
+    }
+
+    markFavorite() {
+        this.setState({favorite: true})
     }
 
     static navigationOptions = {
@@ -69,7 +88,10 @@ class CampsiteInfo extends Component {
 
         return (
             <ScrollView>
-                <RenderCampsite campsite={campsite} />
+                <RenderCampsite campsite={campsite}
+                    favorite={this.state.favorite}
+                    markFavorite={() => this.markFavorite()}
+                />
                 {/* once have the id, have campsites array in local state so can filter by id to get campsite object */}
 
                 {/* return <RenderCampsite campsite={props.campsite} /> -----replaced-------
