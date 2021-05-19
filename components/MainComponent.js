@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, Platform, StyleSheet } from 'react-native';
+import { View, Platform, StyleSheet, Text, ScrollView, Image } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
-import { createDrawerNavigator } from 'react-navigation-drawer'
+import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer'
 import { Icon } from 'react-native-elements'
+import SafeAreaView from 'react-native-safe-area-view'
 // import { CAMPSITES } from '../shared/campsites'; deleted when added navigation
 import Directory from './DirectoryComponent';
 import CampsiteInfo from './CampsiteInfoComponent';
@@ -25,7 +26,7 @@ const DirectoryNavigator = createStackNavigator(
                     name='list'
                     type='font-awesome'
                     iconStyle={styles.stackIcon}
-                    onPress={() => navigation.toggleDrawer}
+                    onPress={() => navigation.toggleDrawer()}
                     // pass in navigation to use toggleDrawer method
                 />
             })
@@ -68,7 +69,7 @@ const HomeNavigator = createStackNavigator(
                 name='home'
                 type='font-awesome'
                 iconStyle={styles.stackIcon}
-                onPress={() => navigation.toggleDrawer}
+                onPress={() => navigation.toggleDrawer()}
             />
         })
     }
@@ -92,7 +93,7 @@ const AboutNavigator = createStackNavigator(
                 name='info-circle'
                 type='font-awesome'
                 iconStyle={styles.stackIcon}
-                onPress={() => navigation.toggleDrawer}
+                onPress={() => navigation.toggleDrawer()}
             />
         })
     }
@@ -116,10 +117,34 @@ const ContactNavigator = createStackNavigator(
                 name='address-card'
                 type='font-awesome'
                 iconStyle={styles.stackIcon}
-                onPress={() => navigation.toggleDrawer}
+                onPress={() => navigation.toggleDrawer()}
             />
         })
     }
+)
+
+// customizing drawer component
+const CustomDrawerContentComponent = props => (
+    <ScrollView>
+        <SafeAreaView /* for iphone X */
+            style={styles.container}
+            forceInset={{top: 'always', horizontal: 'never'}}
+        >
+            <View style={styles.drawerHeader}>
+                <View style={{flex: 1}}>
+                    <Image
+                        source={require('./images/logo.png')}
+                        style={styles.drawerImage}
+                    />
+                </View>
+                <View style={{flex: 2}}>
+                    <Text style={styles.drawerHeaderText}>NuCamp</Text>
+                </View>
+            </View>
+            <DrawerItems {...props} />
+            {/* ??? */}
+        </SafeAreaView>
+    </ScrollView>
 )
 
 // drawer navigator for Home component
@@ -183,7 +208,8 @@ const MainNavigator = createDrawerNavigator(
         }
     },
     {
-        drawerBackgroundColor: '#CEC8FF'
+        drawerBackgroundColor: '#CEC8FF',
+        contentComponent: CustomDrawerContentComponent
     }
 )
 
@@ -239,13 +265,34 @@ class Main extends Component {
     }
 }
 
+// internal stylesheet
 const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+    drawerHeader: {
+        backgroundColor: '#5637DD',
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'row'
+    },
+    drawerHeaderText: {
+        color: '#fff',
+        fontSize: 24,
+        fontWeight: 'bold'
+    },
+    drawerImage: {
+        margin: 10,
+        height: 60,
+        width: 60
+    },
     stackIcon: {
         marginLeft: 10,
         color: '#fff',
         fontSize: 24
     }
 })
-// creating internal stylesheet
 
 export default Main;
