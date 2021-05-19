@@ -28,6 +28,7 @@ function RenderCampsite(props) {
                     raised //shadow effect
                     reverse //reverse color scheme
                     onPress={() => props.favorite ? console.log(`Already set as a favorite`) : props.markFavorite()}
+                    // if already set as favorite, won't mark again and just console log
                 />
             </Card>
         )
