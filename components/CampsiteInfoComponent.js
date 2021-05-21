@@ -5,14 +5,19 @@ import { Card, Icon } from 'react-native-elements'
 //import { COMMENTS } from '../shared/comments' ---- removed when added redux to fetch via json-server ------
 import { connect } from 'react-redux'
 import { baseUrl } from '../shared/baseUrl'
+import { postFavorite } from '../redux/ActionCreators'
 
 const mapStateToProps = state => {
     return {
         campsites: state.campsites,
-        comments: state.comments
+        comments: state.comments,
+        favorites: state.favorites
     }
 }
 
+const mapDispatchToProps = {
+    postFavorite: campsiteId => (postFavorite(campsiteId))
+}
 
 // function RenderCampsite({campsite}) {
     // only using the property of the campsite object so can destructure
@@ -70,18 +75,24 @@ function RenderComments({comments}) {
 // function CampsiteInfo(props) ---convert into class component to hold state
 
 class CampsiteInfo extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
+    //constructor(props) {
+        //super(props)
+        //this.state = {
             // campsites: CAMPSITES, ----removed when redux added
             // comments: COMMENTS,
-            favorite: false
+            //favorite: false
             // change to redux later because rn favorite will reset every time CampsiteInfoComponent is loaded
-        }
-    }
+        //}
+    //}
+    
 
-    markFavorite() {
-        this.setState({favorite: true})
+    // markFavorite() {
+    //     this.setState({favorite: true})
+    // } ----changed when added favorite to redux -----
+
+    markFavorite(campsiteId) { //pass in campsite id to mark
+        this.props.postFavorite(campsiteId)
+        //can call as props because of mapDispatchToProps object earlier in this file
     }
 
     static navigationOptions = {
@@ -100,8 +111,9 @@ class CampsiteInfo extends Component {
         return (
             <ScrollView>
                 <RenderCampsite campsite={campsite}
-                    favorite={this.state.favorite}
-                    markFavorite={() => this.markFavorite()}
+                    favorite={this.props.favorites.includes(campsiteId)}
+                    // returns true or false if array already includes the favorited campsite id then pass value to RenderCampsite component
+                    markFavorite={() => this.markFavorite(campsiteId)}
                 />
                 {/* once have the id, have campsites array in local state so can filter by id to get campsite object */}
 
@@ -114,4 +126,4 @@ class CampsiteInfo extends Component {
     }
 }
 
-export default connect(mapStateToProps)(CampsiteInfo)
+export default connect(mapStateToProps, mapDispatchToProps)(CampsiteInfo)

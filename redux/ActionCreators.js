@@ -2,6 +2,7 @@ import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 // using ip address from baseUrl file
 
+// comments action creators
 export const fetchComments = () => dispatch => {
     // fetchComments action creator wrapping action creator in another function so thunk middleware will stop dispatch from going to reducer
     // instead sends async request to server in baseUrl file using fetch
@@ -36,6 +37,7 @@ export const addComments = comments => ({
     payload: comments
 });
 
+// campsites action creators
 export const fetchCampsites = () => dispatch => {
 
     dispatch(campsitesLoading());
@@ -73,6 +75,7 @@ export const addCampsites = campsites => ({
     payload: campsites
 });
 
+// promotions action creators
 export const fetchPromotions = () => dispatch => {
     
     dispatch(promotionsLoading());
@@ -110,6 +113,8 @@ export const addPromotions = promotions => ({
     payload: promotions
 });
 
+
+// partners action creators
 export const fetchPartners = () => dispatch => {
     
     dispatch(partnersLoading());
@@ -146,3 +151,15 @@ export const addPartners = partners => ({
     type: ActionTypes.ADD_PARTNERS,
     payload: partners
 });
+
+// favorites action creators
+export const postFavorite = campsiteId => dispatch => {
+    setTimeout(() => {
+        dispatch(addFavorite(campsiteId))
+    }, 2000)
+} //thunked
+
+export const addFavorite = campsiteId => ({
+    type: ActionTypes.ADD_FAVORITE,
+    payload: campsiteId
+})

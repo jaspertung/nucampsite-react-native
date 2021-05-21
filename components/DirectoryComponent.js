@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, FlatList } from 'react-native'
+import { Text, View, FlatList } from 'react-native'
 import { Tile } from 'react-native-elements'
 //import { ListItem } from 'react-native-elements' ----changed when redux added-----
 //import { CAMPSITES } from '../shared/campsites';
