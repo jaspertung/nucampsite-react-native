@@ -1,8 +1,17 @@
 import React, { Component } from 'react'
 import { Text, View, ScrollView, FlatList } from 'react-native'
 import { Card, Icon } from 'react-native-elements'
-import { CAMPSITES } from '../shared/campsites'
-import { COMMENTS } from '../shared/comments'
+//import { CAMPSITES } from '../shared/campsites' ---- removed when added redux to fetch via json-server ------
+//import { COMMENTS } from '../shared/comments' ---- removed when added redux to fetch via json-server ------
+import { connect } from 'react-redux'
+import { baseUrl } from '../shared/baseUrl'
+
+const mapStateToProps = state => {
+    return {
+        campsites: state.campsites,
+        comments: state.comments
+    }
+}
 
 
 // function RenderCampsite({campsite}) {
@@ -15,7 +24,8 @@ function RenderCampsite(props) {
         return (
             <Card
                 featuredTitle={campsite.name}
-                image={require('./images/react-lake.jpg')} >
+                //image={require('./images/react-lake.jpg')} ----changed when redux added-----
+                image={{uri: baseUrl + campsite.image}} >
                 <Text style={{margin:10}}>
                     {/* looks like CSS but is JS object */}
                     {campsite.description}
@@ -63,8 +73,8 @@ class CampsiteInfo extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            campsites: CAMPSITES,
-            comments: COMMENTS,
+            // campsites: CAMPSITES, ----removed when redux added
+            // comments: COMMENTS,
             favorite: false
             // change to redux later because rn favorite will reset every time CampsiteInfoComponent is loaded
         }
@@ -83,8 +93,8 @@ class CampsiteInfo extends Component {
         // from DirectoryComponent holding id of campsite being passed, so access id in here from navigation prop that comes automatically from being a screen
         const campsiteId = this.props.navigation.getParam('campsiteId')
         // getting parameter of campsite id
-        const campsite = this.state.campsites.filter(campsite => campsite.id === campsiteId)[0]
-        const comments = this.state.comments.filter(comment => comment.campsiteId === campsiteId)
+        const campsite = this.props.campsites.campsites.filter(campsite => campsite.id === campsiteId)[0]
+        const comments = this.props.comments.comments.filter(comment => comment.campsiteId === campsiteId)
         // filtering out comments that have matching campsiteId property to the selected campsite's campsiteId
 
         return (
@@ -104,4 +114,4 @@ class CampsiteInfo extends Component {
     }
 }
 
-export default CampsiteInfo
+export default connect(mapStateToProps)(CampsiteInfo)

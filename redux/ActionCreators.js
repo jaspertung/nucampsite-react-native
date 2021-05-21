@@ -1,7 +1,10 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
+// using ip address from baseUrl file
 
 export const fetchComments = () => dispatch => {
+    // fetchComments action creator wrapping action creator in another function so thunk middleware will stop dispatch from going to reducer
+    // instead sends async request to server in baseUrl file using fetch
     return fetch(baseUrl + 'comments')
         .then(response => {
                 if (response.ok) {
@@ -19,12 +22,14 @@ export const fetchComments = () => dispatch => {
         .then(response => response.json())
         .then(comments => dispatch(addComments(comments)))
         .catch(error => dispatch(commentsFailed(error.message)));
+        // actions depend on if promise comes back or not
 };
 
 export const commentsFailed = errMess => ({
     type: ActionTypes.COMMENTS_FAILED,
     payload: errMess
 });
+// non-thunk action creator functions
 
 export const addComments = comments => ({
     type: ActionTypes.ADD_COMMENTS,

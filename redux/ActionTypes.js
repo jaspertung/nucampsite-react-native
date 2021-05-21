@@ -12,3 +12,5 @@ export const PROMOTIONS_FAILED = 'PROMOTIONS_FAILED';
 export const PARTNERS_LOADING = 'PARTNERS_LOADING';
 export const ADD_PARTNERS = 'ADD_PARTNERS';
 export const PARTNERS_FAILED = 'PARTNERS_FAILED';
+
+// all the possible action objects we can dispatch to reducers to let application know the current state

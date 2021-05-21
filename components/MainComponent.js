@@ -11,6 +11,16 @@ import CampsiteInfo from './CampsiteInfoComponent';
 import Home from './HomeComponent';
 import About from './AboutComponent';
 import Contact from './ContactComponent';
+import { connect } from 'react-redux'
+import { fetchCampsites, fetchComments, fetchPromotions, fetchPartners } from '../redux/ActionCreators' //thunked ActionCreators
+
+const mapDispatchToProps = {
+    // allows access to action creators as props
+    fetchCampsites,
+    fetchComments,
+    fetchPromotions,
+    fetchPartners
+} //perform async fetch calls to get data from server
 
 // Main component creates and holds all navigators
 
@@ -235,6 +245,14 @@ class Main extends Component {
         this.setState({selectedCampsite: campsiteId})
     }*/ // moved event handler routing to navigation when added navigation
 
+    // making main component call action creators after the component has been created
+    componentDidMount() {
+        this.props.fetchCampsites()
+        this.props.fetchComments()
+        this.props.fetchPromotions()
+        this.props.fetchPartners()
+    }
+
     render() {
         return (
             <View
@@ -295,4 +313,5 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Main;
+// no mapStateToProps so use null as first argument so can access action creators as props inside main component
+export default connect(null, mapDispatchToProps)(Main);

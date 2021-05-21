@@ -19,3 +19,7 @@ export const ConfigureStore = () => {
 
     return store;
 }
+
+// importing redux middlewares thunk and logger
+// combines all the reducers (campsites, comments, partners, promotions) into a single root reducer
+// then enable thunk and logger

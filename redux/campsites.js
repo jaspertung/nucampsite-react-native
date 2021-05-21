@@ -1,4 +1,5 @@
 import * as ActionTypes from './ActionTypes';
+// imports all action types
 
 export const campsites = (state = { isLoading: true,
                                      errMess: null,
@@ -17,3 +18,7 @@ export const campsites = (state = { isLoading: true,
             return state;
       }
 };
+
+// reducer file
+// export campsites reducer section of state initializes with default function parameter syntax plus action
+// then returns new state or if none match, then return original state
