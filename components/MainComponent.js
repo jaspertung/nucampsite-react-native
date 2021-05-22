@@ -11,6 +11,7 @@ import CampsiteInfo from './CampsiteInfoComponent';
 import Home from './HomeComponent';
 import About from './AboutComponent';
 import Contact from './ContactComponent';
+import Reservation from './ReservationComponent';
 import { connect } from 'react-redux'
 import { fetchCampsites, fetchComments, fetchPromotions, fetchPartners } from '../redux/ActionCreators' //thunked ActionCreators
 
@@ -133,6 +134,30 @@ const ContactNavigator = createStackNavigator(
     }
 )
 
+// stack navigator for Reservation component
+const ReservationNavigator = createStackNavigator(
+    {
+        Reservation: { screen: Reservation }
+    },
+    {
+        defaultNavigationOptions: ({navigation}) => ({
+            headerStyle: {
+                backgroundColor: '#5637DD'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                color: '#fff'
+            }, 
+            headerLeft: <Icon
+                name='tree'
+                type='font-awesome'
+                iconStyle={styles.stackIcon}
+                onPress={() => navigation.toggleDrawer()}
+            />
+        })
+    }
+)
+
 // customizing drawer component
 const CustomDrawerContentComponent = props => (
     <ScrollView>
@@ -180,6 +205,20 @@ const MainNavigator = createDrawerNavigator(
                 drawerIcon: ({tintColor}) => (
                     <Icon
                         name='list'
+                        type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            }
+        },
+        Reservation: {
+            screen: ReservationNavigator,
+            navigationOptions: {
+                drawerLabel: 'Reserve Campsite',
+                drawerIcon: ({tintColor}) => (
+                    <Icon
+                        name='tree'
                         type='font-awesome'
                         size={24}
                         color={tintColor}
