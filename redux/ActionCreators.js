@@ -37,6 +37,25 @@ export const addComments = comments => ({
     payload: comments
 });
 
+// adding new comment action creators
+export const postComment = (campsiteId, rating, author, text) => dispatch => {
+    const newComment = {
+        campsiteId,
+        rating,
+        author,
+        text
+    }
+    newComment.date = new Date().toISOString() //don't put method in newComment (refresh often)
+    setTimeout(() => {
+        dispatch(addComment(newComment))
+    }, 2000)
+}
+
+export const addComment = comment => ({
+    type: ActionTypes.ADD_COMMENT,
+    payload: comment
+})
+
 // campsites action creators
 export const fetchCampsites = () => dispatch => {
 
