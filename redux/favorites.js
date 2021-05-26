@@ -15,6 +15,10 @@ export const favorites = (state = [], action) => { // initialize state into empt
             return state.concat(action.payload)
             // else return new state with new favorited campsite id concatenated to end of array
             // .concat takes copy of array and add new item without mutating original array
+        case ActionTypes.DELETE_FAVORITE:
+            // removing an item from the state array
+            return state.filter(favorite => favorite !== action.payload)
+            // filters through array to return a new one that contains favorited items not matching the deleted favorite id from action.payload
         default:
             return state;
     }

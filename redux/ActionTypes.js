@@ -16,5 +16,6 @@ export const ADD_PARTNERS = 'ADD_PARTNERS';
 export const PARTNERS_FAILED = 'PARTNERS_FAILED';
 
 export const ADD_FAVORITE = 'ADD_FAVORITE'
+export const DELETE_FAVORITE = 'DELETE_FAVORITE'
 
 // all the possible action objects we can dispatch to reducers to let application know the current state
