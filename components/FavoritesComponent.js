@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, FlatList, StyleSheet } from 'react-native'
+import { Text, View, FlatList, StyleSheet, Alert } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import { connect } from 'react-redux'
 import Loading  from './LoadingComponent'
@@ -33,7 +33,29 @@ class Favorites extends Component {
                     <View style={styles.deleteView}>
                         <TouchableOpacity
                             style={styles.deleteTouchable}
-                            onPress={() => this.props.deleteFavorite(item.id)}
+                            // onPress={() => this.props.deleteFavorite(item.id)} ---- non-alert version ----
+                            onPress={() =>
+                                Alert.alert(
+                                    'Delete Favorite?', //1st parameter: title 
+                                    'Are you sure you wish to delete the favorite campsite ' + item.name + '?', //2nd parameter: dialogue box
+                                    // 3rd parameter: set of actions alert needs to support provided as an array of objects
+                                    // each item in array represents a button
+                                    [
+                                        {
+                                            text: 'Cancel',
+                                            onPress: () => console.log(item.name + 'Not Deleted'),
+                                            style: 'cancel'
+                                        },
+                                        {
+                                            text: 'OK',
+                                            onPress: () => this.props.deleteFavorite(item.id)
+                                        }
+                                    ],
+                                    { cancelable: false }
+                                    // optional parameter: android can't tap outside of alert box to cancel, must tap 'cancel' or 'ok'
+
+                                )
+                            }
                         >
                             <Text style={styles.deleteText}>Delete</Text>
                         </TouchableOpacity>
