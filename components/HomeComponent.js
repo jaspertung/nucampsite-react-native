@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView } from 'react-native'
+import { Text, View, Animated } from 'react-native'
 import { Card } from 'react-native-elements'
 // import { CAMPSITES } from '../shared/campsites';
 // import { PROMOTIONS } from '../shared/promotions';
@@ -56,13 +56,42 @@ class Home extends Component {
     //         partners: PARTNERS
     //     }
     // }
+    
+    constructor(props) {
+        // storing animated value in local component state
+        super(props)
+        this.state = {
+            scaleValue: new Animated.Value(0)
+            // 0 is initial scale value
+        }
+    }
+
+    // custom method
+    animate() {
+        Animated.timing(
+            // 1st argument: name of animated value we want to change over time
+            this.state.scaleValue,
+            // 2nd argument: object with 3 properties
+            {
+                toValue: 1, //value we want to change to
+                duration: 1500, //time it takes to aniamte from 0 to 1
+                useNativeDriver: true //improves animation in library
+            }
+        ).start() //runs animation
+    }
+
+    // when home component mounts, will auto start animation
+    componentDidMount() {
+        this.animate()
+    }
+    
     static navigationOptions = {
         title: 'Home'
     }
 
     render() {
         return (
-            <ScrollView>
+            <Animated.ScrollView style={{transform: [{scale: this.state.scaleValue}]}}>
                 <RenderItem
                     item={this.props.campsites.campsites.filter(campsite => campsite.featured)[0]} //only passing in featured campsite
                     isLoading={this.props.campsites.isLoading}
@@ -78,7 +107,7 @@ class Home extends Component {
                     isLoading={this.props.partners.isLoading}
                     errMess={this.props.partners.errMess}
                     />
-            </ScrollView>
+            </Animated.ScrollView>
             // ScrollView: loads all child components at once
             // FlatList: lazy loading: loads only what is on-screen (better performance, better for longer lists)
         )
