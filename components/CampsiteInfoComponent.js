@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, ScrollView, FlatList, StyleSheet, Modal, Button } from 'react-native'
+import { Text, View, ScrollView, FlatList, StyleSheet, Modal, Button, Alert, PanResponder } from 'react-native'
 import { Card, Icon, Rating, Input } from 'react-native-elements'
 //import { CAMPSITES } from '../shared/campsites' ---- removed when added redux to fetch via json-server ------
 //import { COMMENTS } from '../shared/comments' ---- removed when added redux to fetch via json-server ------
@@ -27,9 +27,63 @@ function RenderCampsite(props) {
     // using more properties (favorite) now so don't destructure and use props instead
 
     const {campsite} = props //destructure here instead and can still use favorite props
+
+    const view = React.createRef()
+    // creating reference (like id in html to getElementById)
+
+    const recognizeDrag = ({dx}) => (dx < -200) ? true : false
+    //parameter is an object and destructured from it is property called dx (distance of gesture across x axis)
+    // recognize horizontal gesture to the left smaller than 200px
+
+    const panResponder = PanResponder.create({
+        // type of responder to create
+        // panHandlers
+        onStartShouldSetPanResponder: () => true, //activates panresponder to respond to gestures on the component it is used on
+        onPanResponderGrant: () => {
+            // panHandler that is triggered when gesture is first recognized
+            view.current.rubberBand(1000)
+            // refer to currently mounted instance (.current)
+            // all animatable functions can be used as props and methods
+            .then(endState => console.log(endState.finished ? 'finished' : 'canceled'))
+            // every animatable method returns promise object at end of duration that contains property of finish
+            // finish is true if successful and false if failed
+        },
+        onPanResponderEnd: (e, gestureState) => { 
+            // 1st param: e stands for event (not using, but need to to access 2nd param)
+            // 2nd param: object thats holds info about gesture that just ended
+            console.log('pan responder end', gestureState)
+            if (recognizeDrag(gestureState)) {
+                // true if horizontal gesture more than 200 px to the left aka < -200 (?????)
+                Alert.alert(
+                    'Add Favorite',
+                    'Are you sure you wish to add ' + campsite.name + ' to favorite?',
+                    [
+                        {
+                            text: 'Cancel',
+                            style: 'cancel',
+                            onPress: () => console.log('Cancel Pressed')
+                        },
+                        {
+                            text: 'OK',
+                            onPress: () => props.favorite ? console.log('Already set as a favorite') : props.markFavorite()
+                        }
+                    ],
+                    { cancelable: false }
+                )
+            }
+            return true
+        }
+    })
+
     if (campsite) {
         return (
-            <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
+            <Animatable.View
+                animation='fadeInDown'
+                duration={2000}
+                delay={1000}
+                ref={view}
+                {...panResponder.panHandlers}>
+                {/* spread out panResponder's panHandlers then recombine into 1 object to pass in as props to this component */}
                 <Card
                     featuredTitle={campsite.name}
                     //image={require('./images/react-lake.jpg')} ----changed when redux added-----
