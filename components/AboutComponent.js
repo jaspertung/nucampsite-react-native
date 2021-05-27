@@ -5,6 +5,7 @@ import { Card, ListItem } from 'react-native-elements'
 import { connect } from 'react-redux'
 import { baseUrl } from '../shared/baseUrl'
 import Loading  from './LoadingComponent' // don't need curly braces because it is the default import
+import * as Animatable from 'react-native-animatable'
 
 const mapStateToProps = state => {
 // receive state as a prop and returns partners data from the state
@@ -63,25 +64,29 @@ class About extends Component {
         if (this.props.partners.errMess) {
             return (
                 <ScrollView>
-                    <Mission />
-                    <Card title="Community Partners">
-                        <Text>{this.props.partners.errMess}</Text>
-                    </Card>
+                    <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
+                        <Mission />
+                        <Card title="Community Partners">
+                            <Text>{this.props.partners.errMess}</Text>
+                        </Card>
+                    </Animatable.View>
                 </ScrollView>
             )
         }
         return (
             <ScrollView>
-                <Mission />
-                <Card title="Community Partners">
-                    <FlatList
-                        // data={this.state.partners} ---change when added redux, because not data being passed as prop now----
-                        data={this.props.partners.partners}
-                        // 1st partners referring to entire part of the state, 2nd partners referring to the partners data array inside the partners state
-                        renderItem={renderPartner}
-                        keyExtractor={item => item.id.toString()}
-                    />
-                </Card>
+                <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
+                    <Mission />
+                    <Card title="Community Partners">
+                        <FlatList
+                            // data={this.state.partners} ---change when added redux, because not data being passed as prop now----
+                            data={this.props.partners.partners}
+                            // 1st partners referring to entire part of the state, 2nd partners referring to the partners data array inside the partners state
+                            renderItem={renderPartner}
+                            keyExtractor={item => item.id.toString()}
+                        />
+                    </Card>
+                </Animatable.View>
             </ScrollView>
         )
     }

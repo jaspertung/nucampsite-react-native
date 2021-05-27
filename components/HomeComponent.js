@@ -74,7 +74,7 @@ class Home extends Component {
             // 2nd argument: object with 3 properties
             {
                 toValue: 1, //value we want to change to
-                duration: 1500, //time it takes to aniamte from 0 to 1
+                duration: 1500, //time it takes to animate from 0 to 1
                 useNativeDriver: true //improves animation in library
             }
         ).start() //runs animation

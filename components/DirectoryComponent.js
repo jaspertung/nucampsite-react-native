@@ -6,6 +6,7 @@ import { Tile } from 'react-native-elements'
 import { connect } from 'react-redux'
 import { baseUrl } from '../shared/baseUrl'
 import Loading  from './LoadingComponent'
+import * as Animatable from 'react-native-animatable'
 
 const mapStateToProps = state => {
     return {
@@ -55,13 +56,15 @@ class Directory extends Component {
                 //     /* takes property of source and value is function provided by NodeJS (require) */
                 //     /* hard coding 1 image for every item for now */
                 // /> ----changed when redux added-----
-                <Tile
-                    title={item.name}
-                    caption={item.description}
-                    featured
-                    onPress={() => navigate('CampsiteInfo', { campsiteId: item.id })}
-                    imageSrc={{uri: baseUrl + item.image}}
-                />
+                <Animatable.View animation='fadeInRightBig' duration={2000}>
+                    <Tile
+                        title={item.name}
+                        caption={item.description}
+                        featured
+                        onPress={() => navigate('CampsiteInfo', { campsiteId: item.id })}
+                        imageSrc={{uri: baseUrl + item.image}}
+                    />
+                </Animatable.View>
             )
         }
 
