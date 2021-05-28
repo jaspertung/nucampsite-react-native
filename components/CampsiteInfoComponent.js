@@ -35,6 +35,8 @@ function RenderCampsite(props) {
     //parameter is an object and destructured from it is property called dx (distance of gesture across x axis)
     // recognize horizontal gesture to the left smaller than 200px
 
+    const recognizeComment = ({dx}) => (dx > 200) ? true : false
+
     const panResponder = PanResponder.create({
         // type of responder to create
         // panHandlers
@@ -70,8 +72,9 @@ function RenderCampsite(props) {
                     ],
                     { cancelable: false }
                 )
+            } else if (recognizeComment(gestureState)) {
+                props.onShowModal()
             }
-            return true
         }
     })
 
