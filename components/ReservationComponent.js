@@ -12,7 +12,8 @@ class Reservation extends Component {
         this.state = {
             campers: 1,
             hikeIn: false,
-            date: new Date()
+            date: new Date(),
+            showCalendar: false
             //showModal: false ----replaced with alert----
         }
     }
@@ -25,10 +26,32 @@ class Reservation extends Component {
     //     this.setState({showModal: !this.state.showModal})
     // } ----replaced with alert----
 
-    // handleReservation() {
-    //     console.log(JSON.stringify(this.state))
-    //     this.toggleModal()
-    // } ----replaced with alert----
+    handleReservation() {
+        console.log(JSON.stringify(this.state))
+        const message = `Number of Campers: ${this.state.campers}\n
+                        Hike-In? ${this.state.hikeIn}\n
+                        Date: ${this.state.date.toLocaleDateString('en-US')}`
+        Alert.alert(
+            'Begin Search?',
+            message,
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => {
+                        console.log('Reservation Search Canceled')
+                        this.resetForm()
+                    },
+                    style: 'cancel'
+                },
+                {
+                    text: 'OK',
+                    onPress: () => this.resetForm()
+                }
+            ],
+            { cancelable: false }
+        )
+    }
+    }
 
     resetForm() {
         this.setState({
@@ -101,26 +124,7 @@ class Reservation extends Component {
                     )}
                     <View style={styles.formRow}>
                         <Button
-                            onPress={() => 
-                                Alert.alert(
-                                    'Begin Search?',
-                                    'Number of Campers: ' + this.state.campers,
-                                    //'Hike-In? ' + this.state.hikeIn,
-                                    //'Date: ' +  this.state.date.toLocaleDateString('en-US'),
-                                    [
-                                        {
-                                            text: 'Cancel',
-                                            onPress: () => this.resetForm(),
-                                            style: 'cancel'
-                                        },
-                                        {
-                                            text: 'OK',
-                                            onPress: () => this.resetForm()
-                                        }
-                                    ],
-                                    { cancelable: false }
-                                )
-                            }
+                            onPress={() => this.handleReservation()}
                             title='Search'
                             color='#5637DD'
                             accessibilityLabel='Tap me to search for available campsites to reserve'
