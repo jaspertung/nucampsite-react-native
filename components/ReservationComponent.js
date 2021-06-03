@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Text, ScrollView, Switch, Button, Picker, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker'
 import * as Animatable from 'react-native-animatable'
+import * as Notifications from 'expo-notifications'
 // import Picker from '@react-native-community/picker'
 
 // controlled form where data is stored in and controlled by the component itself rather than by redux
@@ -44,8 +45,11 @@ class Reservation extends Component {
                     style: 'cancel'
                 },
                 {
-                    text: 'OK',
-                    onPress: () => this.resetForm()
+                    text: 'OK', //call notification when OK button pressed
+                    onPress: () => {
+                        this.presentLocalNotification(this.state.date.toLocaleDateString('en-US'))
+                        this.resetForm()
+                    }
                 }
             ],
             { cancelable: false }
@@ -61,6 +65,38 @@ class Reservation extends Component {
             //showModal: false
             // resets state
         })
+    }
+
+    // requesting permissions from device and waiting for permissions to return before continuing
+    async presentLocalNotification(date) { // async function: special function that always returns a promise
+    // don't want to send notification immediately because need to get permission first
+        function sendNotification() {
+            Notifications.setNotificationHandler({
+                handleNotification: async () => ({
+                    shouldShowAlert: true
+                    // override default no show notification
+                })
+            })
+            Notifications.scheduleNotificationAsync({
+                content: {
+                    title: 'Your Campsite Reservation Search',
+                    body: `Search for ${date} requested`
+                },
+                trigger: null //causes notification to fire immediately (can be used to schedule)
+            })
+        }
+        //check if have permissions
+        let permissions = await Notifications.getPermissionsAsync() //await can only be used inside async function (similar to then method)
+        // .getPermissionsAsync checks if app already have notifications permissions from device
+        // returns promise with results of the check
+        // await makes function wait until promise is fulfilled, then assign promise result to permissions variable
+        if (!permissions.granted) { //if unable to verify existing permissions
+            //make explicit request for permission
+            permissions = await Notifications.requestPermissionsAsync()
+        }
+        if (permissions.granted) { //already had permission or just got them
+            sendNotification()
+        }
     }
 
     render() {
