@@ -51,7 +51,6 @@ class Reservation extends Component {
             { cancelable: false }
         )
     }
-    }
 
     resetForm() {
         this.setState({
