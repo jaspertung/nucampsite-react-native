@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, ScrollView, FlatList, StyleSheet, Modal, Button, Alert, PanResponder } from 'react-native'
+import { Text, View, ScrollView, FlatList, StyleSheet, Modal, Button, Alert, PanResponder, Share } from 'react-native'
 import { Card, Icon, Rating, Input } from 'react-native-elements'
 //import { CAMPSITES } from '../shared/campsites' ---- removed when added redux to fetch via json-server ------
 //import { COMMENTS } from '../shared/comments' ---- removed when added redux to fetch via json-server ------
@@ -78,6 +78,17 @@ function RenderCampsite(props) {
         }
     })
 
+    const shareCampsite = (title, message, url) => {
+        Share.share({
+            // required: content that is being shared
+            title,
+            message: `${title}: ${message} ${url}`,
+            url
+        }, { //optional config options
+            dialogTitle: 'Share ' + title //android only
+        })
+    }
+
     if (campsite) {
         return (
             <Animatable.View
@@ -113,6 +124,14 @@ function RenderCampsite(props) {
                             raised
                             reverse 
                             onPress={() => props.onShowModal()}
+                        />
+                        <Icon
+                            name={'share'}
+                            type="font-awesome"
+                            color="#5637DD"
+                            raised
+                            reverse 
+                            onPress={() => shareCampsite(campsite.name, campsite.description, baseUrl + campsite.image)} //no props because wasn't passed down as a prop
                         />
                     </View>
                 </Card>
