@@ -369,21 +369,27 @@ class Main extends Component {
         this.props.fetchComments()
         this.props.fetchPromotions()
         this.props.fetchPartners()
-
+        this.showNetInfo()
         // NetInfo libraries's fetch method returns a promise that resolves to a NetInfoState object
         // access NetInfoState object with .then and named connectionInfo)
-        NetInfo.fetch().then(connectionInfo => {
+        /*NetInfo.fetch().then(connectionInfo => {
             (Platform.OS === 'ios')
                 ? Alert.alert('Initial Network Connectivity Type: ', connectionInfo.type)
                 // Toast- brief message that pops up and then fades away
                 //.LONG- length of time shown (3.5 sec)
                 : ToastAndroid.show('Initial Network Connectivity Type: ' + connectionInfo.type, ToastAndroid.LONG)
-        })
-
+        }) ---changed to async method---*/
         // subscribe to network changes as soon as application loads
         this.unsubscribeNetInfo = NetInfo.addEventListener(connectionInfo => {
             this.handleConnectivityChange(connectionInfo)
         })
+    }
+
+    async showNetInfo() {
+        const connectionInfo = await NetInfo.fetch()
+        (Platform.OS === 'ios')
+                ? Alert.alert('Initial Network Connectivity Type: ', connectionInfo.type)
+                : ToastAndroid.show('Initial Network Connectivity Type: ' + connectionInfo.type, ToastAndroid.LONG)
     }
 
     componentWillUnmount() {
