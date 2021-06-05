@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, Button } from 'react-native'
-import { Input, CheckBox } from 'react-native-elements'
+import { View, StyleSheet, ScrollView, Image } from 'react-native'
+import { Input, CheckBox, Button, Icon } from 'react-native-elements'
 import * as SecureStore from 'expo-secure-store'
+import * as ImagePicker from 'expo-image-picker'
+import * as Permissions from 'expo-permissions'
+import { createBottomTabNavigator } from 'react-navigation-tabs'
+import { baseUrl } from '../shared/baseUrl'
 
 
-class Login extends Component {
+class LoginTab extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -14,7 +18,14 @@ class Login extends Component {
         }
     }
     static navigationOptions = {
-        title: 'Login'
+        title: 'Login',
+        tabBarIcon: ({tintColor}) => ( //automatically gets arg from bottom tab navigator
+            <Icon
+                name='sign-in'
+                type='font-awesome'
+                iconStyle={{color: tintColor}}
+            />
+        )
     }
     handleLogin() {
         console.log(JSON.stringify(this.state))
@@ -77,13 +88,74 @@ class Login extends Component {
                     <Button 
                         onPress={() => this.handleLogin()}
                         title='Login'
-                        color='#5637DD'
+                        icon={
+                            <Icon
+                                name='sign-in'
+                                type='font-awesome'
+                                color= '#fff'
+                                iconStyle={{marginRight: 10}}
+                            />
+                        }
+                        buttonStyle={{backgroundColor:'#5637DD'}}
+                    />
+                </View>
+                <View style={styles.formButton}>
+                    <Button 
+                        onPress={() => this.props.navigation.navigate('Register')} //destructured navigation previously
+                        title='Register'
+                        type='clear'
+                        icon={
+                            <Icon
+                                name='user-plus'
+                                type='font-awesome'
+                                color= 'blue'
+                                iconStyle={{marginRight: 10}}
+                            />
+                        }
+                        titleStyle={{color:'blue'}}
                     />
                 </View>
             </View>
         )
     }
 }
+
+class RegisterTab extends Component {
+    static navigationOptions = {
+        title: 'Register',
+        tabBarIcon: ({tintColor}) => (
+            <Icon
+                name='user-plus'
+                type='font-awesome'
+                iconStyle={{color: tintColor}}
+            />
+        )
+    }
+
+    render() {
+        return (
+            <ScrollView>
+
+            </ScrollView>
+        )
+    }
+}
+
+const Login = createBottomTabNavigator(
+    { // 1st object arg: list of tabs
+        Login: LoginTab,
+        Register: RegisterTab
+    },
+    {// 2nd object arg: config options
+        tabBarOptions: {
+            activeBackgroundColor: '#5637DD',
+            inactiveBackgroundColor: '#CEC8FF',
+            activeTintColor: '#fff',
+            inactiveTintColor: '#808080',
+            labelStyle: {fontSize: 16}
+        }
+    }
+)
 
 const styles = StyleSheet.create({
     container: {
